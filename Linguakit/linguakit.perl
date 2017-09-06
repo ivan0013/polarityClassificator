@@ -187,14 +187,7 @@ my $KWIC = "kwic/kwic.perl";
 #######################
 my $input;
 if($FILE){
-	if ($STRING){
-		open($input,"<",\$FILE);
-	}elsif ($FILE =~ m/\.zip$/){
-		open ($input, '<:gzip', $FILE) or die("'$FILE' not found.");
-	}else{
-		open ($input, '<', $FILE) or die("'$FILE' not found.");
-	}
-	binmode $input, ':utf8';
+	$input = $FILE
 }else{
 	$input = \*STDIN;
 }
@@ -290,7 +283,9 @@ if($MOD eq "dep"){
 		}
 	}else{  ##by default PoS tagging
 		do $LEMMA;
-		while(my $line = <$input>){
+		@inputs = ();
+		push @inputs, $input;
+		while(my $line = shift(@inputs)){
 			my $list = Tagger::tagger(Lemma::lemma(Splitter::splitter(Tokens::tokens(Sentences::sentences([$line])))));
 			for my $result (@{$list}){
 				print "$result\n";
@@ -389,7 +384,7 @@ if($MOD eq "dep"){
 #	while(my $line = <$input>){
 	my @lines = <$input>;
 	#my $list = Keywords::keywords(Tagger::tagger(Ner::ner(Splitter::splitter(Tokens::tokens(Sentences::sentences([$line]))))));
-	my $list = Keywords::keywords(Tagger::tagger(Ner::ner(Splitter::splitter(Tokens::tokens(Sentences::sentences([join("\n" ,@lines)]))))));	
+	my $list = Keywords::keywords(Tagger::tagger(Ner::ner(Splitter::splitter(Tokens::tokens(Sentences::sentences([join("\n" ,@lines)]))))));
 	for my $result (@{$list}){
 			print "$result\n";
 	}
