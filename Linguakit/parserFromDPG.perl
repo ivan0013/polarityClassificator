@@ -7,7 +7,7 @@ $flag = shift(@ARGV);
 if (!defined $flag) {
     $flag = "-a";
 }
-  
+
 #fronteira de frase:
 $Border="SENT";
 
@@ -81,7 +81,7 @@ while (<>) {
   ($token, $info) = split(" ", $_);
 
   if ( ($CountLines % 100) == 0) {;
-       printf  STDERR "- - - processar linha:(%6d) - - -\r",$CountLines;
+       #printf  STDERR "- - - processar linha:(%6d) - - -\r",$CountLines;
   }
   $CountLines++;
 
@@ -121,7 +121,7 @@ while (<>) {
        $Attributes[$j] = "";
        foreach $at (sort keys %Exp) {
 	 if ($at ne "tag"){
-	     $Attributes[$j] .= "$at:$Exp{$at}|" ; 
+	     $Attributes[$j] .= "$at:$Exp{$at}|" ;
              $ATTR[$j]{$at} = $Exp{$at} ;
          }
        }
@@ -161,10 +161,10 @@ while (<>) {
        $listTags .= "$Tag[$i]_${i}_<$Attributes[$i]>" ;
        $seq .= "$Token[$i]_$Tag[$i]_${i}_<$Attributes[$i]>" . " ";
 
-	 
+
       }##fim do for
      # $seq .= "\." . "_" . $Border ;
-     
+
 
 
 ###########################BEGIN GRAMMAR#############################################
@@ -278,7 +278,7 @@ Add("HeadDep","pol:pos",@temp);
 
        for  ($i=0;$i<=$#Token;$i++) {
           print "$Token[$i]\t";
-          $OrdTags{"tag"} = $Tag[$i]; 
+          $OrdTags{"tag"} = $Tag[$i];
           foreach $feat (keys %{$ATTR[$i]}) {
               $OrdTags{$feat} = $ATTR[$i]{$feat};
 	  }
@@ -294,9 +294,9 @@ Add("HeadDep","pol:pos",@temp);
        delete  $Attributes[$i];
        delete  $ATTR[$i];
        }
-       
+
     }
-#########SAIDA STANDARD DO ANALISADOR 
+#########SAIDA STANDARD DO ANALISADOR
 
     elsif ($flag eq "-a") {
 
@@ -383,10 +383,10 @@ Add("HeadDep","pol:pos",@temp);
 
 
 
-      
+
       ##Colocar numa lista vazia os strings com os tags (listTags) e a oraçao (seq)
       ##Borrar hash ordenado de triplets
-      
+
       $i=0;
       $j=0;
       $listTags="";
@@ -401,17 +401,16 @@ Add("HeadDep","pol:pos",@temp);
          delete  $Attributes[$i];
          delete  $ATTR[$i];
        }
-   
-    
+
+
 
   } ##fim do elsif
 
 
- 
+
 }
 
 #print "\n";
-print STDERR "Fim do parsing...\n";
 
 
 
@@ -445,16 +444,16 @@ sub HeadDep {
             }
             else {
              foreach $atr (@z) {
-	
-		if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) && 
+
+		if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) &&
                       ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n2]{$atr}  !~  /^[NC0]$/) && ##a modificar: so no caso de que atr = number or genre (N = invariable or neutral)
 		     ($ATTR[$n1]{$atr} ne "" && $ATTR[$n2]{$atr} ne  "") ) {
-                      
+
 		       $found++;
 
                 }
              }
-	
+
 	     # print STDERR "Found: $found\n";
               if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
@@ -510,17 +509,17 @@ sub DepHead {
 
             }
             else {
-	     
+
               foreach $atr (@z) {
-	      
-                 if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) && 
+
+                 if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n2]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n2]{$atr} ne  "") ) {
 		       $found++ ;
                  }
-	        
+
               }
-	    
+
             #  print STDERR "Found: $found\n";
              if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
@@ -580,15 +579,15 @@ sub DepRelHead {
             }
             else {
              foreach $atr (@z) {
-	
-                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) && 
+
+                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n3]{$atr} ne  "") ) {
 		       $found++ ;
                 }
-		
+
              }
-	
+
              if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
                 $listTags =~ s/($Tag[$n3]_${n3}_<)/$1concord:0\|/;
@@ -649,16 +648,16 @@ sub HeadRelDep {
             }
             else {
              foreach $atr (@z) {
-	
-                 if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) && 
-                       ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) && 
+
+                 if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) &&
+                       ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n3]{$atr} ne  "") ) {
 		       $found++ ;
                 }
-	
+
 
              }
-	
+
              if ($found > 0)  {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
                 $listTags =~ s/($Tag[$n3]_${n3}_<)/$1concord:0\|/;
@@ -720,15 +719,15 @@ sub RelDepHead {
             }
             else {
              foreach $atr (@z) {
-	
-                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) && 
+
+                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n3]{$atr} ne  "") ) {
 		       $found++ ;
                 }
-		
+
              }
-	
+
              if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
                 $listTags =~ s/($Tag[$n3]_${n3}_<)/$1concord:0\|/;
@@ -787,15 +786,15 @@ sub RelHeadDep {
             }
             else {
              foreach $atr (@z) {
-	
-                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) && 
+
+                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n3]{$atr} ne  "") ) {
 		       $found++ ;
                 }
-		
+
              }
-	
+
              if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
                 $listTags =~ s/($Tag[$n3]_${n3}_<)/$1concord:0\|/;
@@ -854,15 +853,15 @@ sub DepHeadRel {
             }
             else {
              foreach $atr (@z) {
-	
-                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) && 
+
+                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n3]{$atr} ne  "") ) {
 		       $found++ ;
                 }
-		
+
              }
-	
+
              if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
                 $listTags =~ s/($Tag[$n3]_${n3}_<)/$1concord:0\|/;
@@ -921,15 +920,15 @@ sub HeadDepRel {
             }
             else {
              foreach $atr (@z) {
-	
-                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) && 
+
+                if ( ($ATTR[$n1]{$atr} ne $ATTR[$n3]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n3]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n3]{$atr} ne  "") ) {
 		       $found++ ;
                 }
-		
+
              }
-	
+
              if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
                 $listTags =~ s/($Tag[$n3]_${n3}_<)/$1concord:0\|/;
@@ -1013,7 +1012,7 @@ sub HeadDep_lex {
                      $ATTR_lemma{$n1} .=    "\@$ATTR_lemma{$n2}" ;
                      $ATTR_token{$n1} .=    "\@$ATTR_token{$n2}" ;
 
-		
+
              }
 
             #print STDERR "$n1::: $ATTR_lemma{$n1} -- $ATTR_token{$n1} \n";
@@ -1021,15 +1020,15 @@ sub HeadDep_lex {
             }
             else {
              foreach $atr (@z) {
-	
-		if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) && 
+
+		if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) &&
                        ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n2]{$atr}  !~  /^[NC0]$/) &&
 		      ($ATTR[$n1]{$atr} ne "" && $ATTR[$n2]{$atr} ne  "") ) {
 		       $found++;
 
                 }
              }
-	
+
 	     # print STDERR "Found: $found\n";
               if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
@@ -1077,7 +1076,7 @@ sub HeadDep_lex {
                      $ATTR_lemma{$n1} .=    "\@$ATTR_lemma{$n2}" ;
                      $ATTR_token{$n1} .=    "\@$ATTR_token{$n2}" ;
 
-		
+
               }
 
 
@@ -1149,19 +1148,19 @@ sub DepHead_lex {
 
               }
 
-	
+
             }
             else {
              foreach $atr (@z) {
-	
-		if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) && 
+
+		if ( ($ATTR[$n1]{$atr} ne $ATTR[$n2]{$atr}) &&
                         ($ATTR[$n1]{$atr} !~  /^[NC0]$/ && $ATTR[$n2]{$atr}  !~  /^[NC0]$/) &&
                        ($ATTR[$n1]{$atr} ne "" && $ATTR[$n2]{$atr} ne  "")  ) {
 		       $found++;
 
                 }
              }
-	
+
 	     # print STDERR "Found: $found\n";
               if ($found > 0) {
                	$listTags =~ s/($Tag[$n1]_${n1}_<)/$1concord:0\|/;
@@ -1238,7 +1237,7 @@ sub LEX {
        ##parche para \2... \pi...:
        $ATTR[$idf]{"lemma"}  =~ s/[\\]/\\\\/g ;
        $ATTR[$idf]{"token"}  =~ s/[\\]/\\\\/g ;
-       
+
        $listTags =~ s/($Tag[$idf]_${idf}${l})lemma:$ATTR[$idf]{lemma}/${1}lemma:$ATTR_lemma{$idf}/;
        $listTags =~ s/($Tag[$idf]_${idf}${l})token:$ATTR[$idf]{token}/${1}token:$ATTR_token{$idf}/;
 
@@ -1253,7 +1252,7 @@ sub LEX {
 }
 
 
-##Operaçoes Corr, Inherit, Add, 
+##Operaçoes Corr, Inherit, Add,
 
 sub Corr {
 
@@ -1274,10 +1273,10 @@ sub Corr {
       for ($m=0;$m<=$#x;$m++) {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-		
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-            
+
                ##token:=lemma / lemma:=token
                if ($value =~ /^=/) {
 		   $value =~ s/^=//;
@@ -1289,8 +1288,8 @@ sub Corr {
                    elsif ($value eq "lemma") {
                      $Token[$n1] = $ATTR[$n1]{$value} ;
 		   }
-               } 
-              
+               }
+
 
                ##change the PoS tag:
                elsif ($atr =~ /^tag/) {
@@ -1298,9 +1297,9 @@ sub Corr {
                   $entry = "${value}_${n1}_<";
 
                   if (activarTags($value,$n1)) {
-                    
+
                    foreach $attribute (sort keys %{$ATTR[$n1]}) {
-		        # print STDERR "--atribs: $attribute\n";      
+		        # print STDERR "--atribs: $attribute\n";
 		      if (defined $TagStr{$attribute}) {
                         $entry .= "$attribute:$ATTR[$n1]{$attribute}|" ;
                         #print STDERR "atribute defined : $attribute --$entry\n";
@@ -1309,19 +1308,19 @@ sub Corr {
 			#$entry .= "$attribute:$TagStr{$attribute}|" ;
 			  delete $ATTR[$n1]{$attribute} ;
                           #print STDERR "++entry : $entry\n";
-		      } 
-                     
+		      }
+
                     }
 
                     foreach $attribute (sort keys %TagStr) {
-		        # print STDERR "++atribs: $attribute\n";      
+		        # print STDERR "++atribs: $attribute\n";
 		      if (!defined $ATTR[$n1]{$attribute}) {
                         $entry .= "$attribute:$ATTR[$n1]{$attribute}|" ;
 			$ATTR[$n1]{$attribute} = $TagStr{$attribute};
                         #print STDERR "++atribute defined : $attribute --$entry\n";
 		      }
-                      
-                     
+
+
                     }
 		  }
 
@@ -1341,7 +1340,7 @@ sub Corr {
                     $Token[$n1] = $ATTR[$n1]{"token"};
 		  }
                   $listTags =~ s/($Tag[$n1]_${n1}${l})${atr}:[^|]*\|/${1}$info\|/;
-                
+
 	       }
                else {
                  $listTags =~ s/($Tag[$n1]_${n1}_<)/${1}$info\|/;
@@ -1350,17 +1349,17 @@ sub Corr {
                     $Lemma[$n1] = $ATTR[$n1]{"lemma"};
 		 }
                  if ($atr eq "token") {
-                    $Token[$n1] = $ATTR[$n1]{"token"};  
+                    $Token[$n1] = $ATTR[$n1]{"token"};
 
 		 }
-                
+
                }
 	     }
 
       }
    }
 
- 
+
 
 }
 
@@ -1384,8 +1383,8 @@ sub Inherit {
             $m++;
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
              foreach $atr (@y) {
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
@@ -1400,8 +1399,8 @@ sub Inherit {
             $m++;
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
              foreach $atr (@y) {
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
@@ -1418,9 +1417,9 @@ sub Inherit {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
              foreach $atr (@y) {
-                 
+
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
 
@@ -1436,9 +1435,9 @@ sub Inherit {
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
              foreach $atr (@y) {
-                 
+
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
 
@@ -1455,9 +1454,9 @@ sub Inherit {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
              foreach $atr (@y) {
-                 
+
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
 
@@ -1474,9 +1473,9 @@ sub Inherit {
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
              foreach $atr (@y) {
-                 
+
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
 
@@ -1493,9 +1492,9 @@ sub Inherit {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
              foreach $atr (@y) {
-                 
+
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
 
@@ -1511,9 +1510,9 @@ sub Inherit {
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
              foreach $atr (@y) {
-                 
+
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
 
@@ -1528,8 +1527,8 @@ sub Inherit {
             $m++;
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
              foreach $atr (@y) {
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
@@ -1544,8 +1543,8 @@ sub Inherit {
             $m++;
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
              foreach $atr (@y) {
                   $listTags =~ s/($Tag[$n1]_${n1}${l})$atr:$ATTR[$n1]{$atr}/${1}$atr:$ATTR[$n2]{$atr}/;
                   $ATTR[$n1]{$atr} = $ATTR[$n2]{$atr};
@@ -1570,13 +1569,13 @@ sub Add {
     (@y) = split (",", $y);
 
 
- 
-  
+
+
   if ($z eq "Head") {
       for ($m=0;$m<=$#x;$m++) {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            
+
 
             foreach $info (@y) {
                ($atr, $value) = split (":", $info) ;
@@ -1613,8 +1612,8 @@ sub Add {
             $m++;
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
 
@@ -1657,11 +1656,11 @@ sub Add {
             $m++;
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-	
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-               
+
                 ##change the PoS tag:
                 if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1680,7 +1679,7 @@ sub Add {
 	       }
                else {
                  $listTags =~ s/($Tag[$n1]_${n1}_<)/${1}$info\|/;
-                 $ATTR[$n1]{$atr} = $value; 
+                 $ATTR[$n1]{$atr} = $value;
                  if ($atr eq "lemma") {
                     $Lemma[$n1] = $ATTR[$n1]{"lemma"};
 		 }
@@ -1690,7 +1689,7 @@ sub Add {
                }
 	     }
 
-	     
+
 
       }
    }
@@ -1702,10 +1701,10 @@ sub Add {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                 ##change the PoS tag:
                 if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1736,7 +1735,7 @@ sub Add {
       }
    }
 
-    
+
     elsif ($z eq "HeadRelDep") {
       for ($m=0;$m<=$#x;$m++) {
             $Head = $x[$m];
@@ -1744,10 +1743,10 @@ sub Add {
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-	
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                 ##change the PoS tag:
                if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1788,10 +1787,10 @@ sub Add {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                 ##change the PoS tag:
                if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1831,10 +1830,10 @@ sub Add {
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                 ##change the PoS tag:
                 if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1873,10 +1872,10 @@ sub Add {
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                 ##change the PoS tag:
                if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1915,10 +1914,10 @@ sub Add {
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
             ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
-		
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                  ##change the PoS tag:
                if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1957,11 +1956,11 @@ sub Add {
             $m++;
             $Head = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-              
+
                 ##change the PoS tag:
                if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -1991,7 +1990,7 @@ sub Add {
 	     }
 
       }
-   } 
+   }
 
    if ($z eq "HeadDep_lex") {
       for ($m=0;$m<=$#x;$m++) {
@@ -1999,11 +1998,11 @@ sub Add {
             $m++;
             $Dep = $x[$m];
             ($n1) = ($Head =~ /[\w]+_([0-9]+)/) ;
-            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);  
-		
+            ($n2) = ($Dep =~ /[\w]+_([0-9]+)/);
+
             foreach $info (@y) {
 	       ($atr, $value) = split (":", $info) ;
-	       
+
                 ##change the PoS tag:
                if ($atr =~ /^tag/) {
                   $ATTR[$n1]{$atr} = $value;
@@ -2033,9 +2032,9 @@ sub Add {
                  #print STDERR "$atr - $value ::: #$l# - #$r#";
                }
 	     }
-        
+
       }
-   } 
+   }
 
 
 }
@@ -2048,10 +2047,10 @@ sub negL {
     my $expr="";
     my $ref="";
     my $CAT="";
-  
-    ($CAT, $ref) = split ("_", $x);  
+
+    ($CAT, $ref) = split ("_", $x);
     $expr = "(?<!${CAT})\\_$ref";
-  
+
 
    return $expr
 }
@@ -2062,10 +2061,10 @@ sub negR {
     my $expr="";
     my $ref="";
     my $CAT="";
- 
-    ($CAT, $ref) = split ("_", $x); 
+
+    ($CAT, $ref) = split ("_", $x);
     $expr = "?!${CAT}\\_$ref";
- 
+
    return $expr
 }
 
@@ -2073,15 +2072,15 @@ sub negR {
 
 sub activarTags {
 
-   my ($x, $pos) = @_ ; 
+   my ($x, $pos) = @_ ;
 
    ##shared attributes:
    # $TagStr{"tag"} = 0;
     $TagStr{"lemma"} = 0;
     $TagStr{"token"} = 0;
-  
+
    if ($x =~ /^PRO/) {
-  
+
       $TagStr{"type"} = 0;
       $TagStr{"person"} = 0;
       $TagStr{"gender"} = 0;
@@ -2095,7 +2094,7 @@ sub activarTags {
 
      ##conjunctions:
     elsif ($x =~ /^C/) {
-      
+
        $TagStr{"type"} =  0;
        $TagStr{"pos"} = $pos;
         return 1 ;
@@ -2103,7 +2102,7 @@ sub activarTags {
 
     ##interjections:
     elsif ($x =~ /^I/) {
-   
+
        $TagStr{"type"} = 0;
        $TagStr{"pos"} = $pos;
        return 1 ;
@@ -2111,7 +2110,7 @@ sub activarTags {
 
    ##numbers
    elsif ($x =~  /^CARD/) {
-       
+
        $TagStr{"number"} = "P";
        $TagStr{"person"} = 0;
        $TagStr{"gender"} = 0;
@@ -2121,7 +2120,7 @@ sub activarTags {
 
 
     elsif ($x =~ /^ADJ/) {
-       
+
        $TagStr{"type"} = 0;
        $TagStr{"degree"} = 0;
        $TagStr{"gender"} = 0;
@@ -2133,7 +2132,7 @@ sub activarTags {
 
 
    elsif ($x =~ /^ADV/) {
-       
+
        $TagStr{"type"} = 0;
        $TagStr{"pos"} = $pos;
        return 1 ;
@@ -2141,7 +2140,7 @@ sub activarTags {
 
 
    elsif ($x =~ /^PRP/) {
-       
+
        $TagStr{"type"} = 0;
        $TagStr{"pos"} = $pos;
        return 1 ;
@@ -2149,7 +2148,7 @@ sub activarTags {
 
 
    elsif ($x =~ /^NOUN/) {
-      
+
        $TagStr{"type"} = 0 ;
        $TagStr{"gender"} = 0;
        $TagStr{"number"} = 0;
@@ -2159,7 +2158,7 @@ sub activarTags {
    }
 
    elsif ($x =~ /^DT/) {
- 
+
        $TagStr{"type"} = 0;
        $TagStr{"person"} = 0;
        $TagStr{"gender"} = 0;
@@ -2180,7 +2179,7 @@ sub activarTags {
        $TagStr{"number"} = 0;
        $TagStr{"gender"} = 0;
        $TagStr{"pos"} = $pos;
-       return 1 ;  
+       return 1 ;
    }
    else {
      return 0
@@ -2191,7 +2190,7 @@ sub activarTags {
 
 sub desactivarTags {
 
-   my ($x) = @_ ; 
+   my ($x) = @_ ;
 
       delete $TagStr{"type"} ;
       delete $TagStr{"person"};
@@ -2204,8 +2203,8 @@ sub desactivarTags {
       delete $TagStr{"tense"} ;
       delete $TagStr{"function"} ;
       delete $TagStr{"degree"} ;
-      delete $TagStr{"pos"} ;     
- 
+      delete $TagStr{"pos"} ;
+
       delete $TagStr{"lemma"} ;
       delete $TagStr{"token"} ;
      # delete $TagStr{"tag"} ;
@@ -2218,7 +2217,7 @@ sub ConvertChar {
     my ($x, $y) = @_ ;
 
 
-    $info =~ s/lemma:$x/lemma:\*$y\*/g; 
+    $info =~ s/lemma:$x/lemma:\*$y\*/g;
     $info =~ s/token:$x/token:\*$y\*/g;
 
 }
