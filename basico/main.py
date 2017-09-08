@@ -88,7 +88,7 @@ if __name__ == "__main__":
     #
     #     print tid + "=>" + str(equals)
 
-    tid = '144725240075915264'
+    tid = '167301187157229568'
     tweet = tweets[tid]
     inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
     equals = sentimentMatch(inferred, tweet["polarity"])
@@ -96,4 +96,5 @@ if __name__ == "__main__":
 
     print tid + "=>" + str(equals)
 
+    print "FINAL: \n"
     print results
