@@ -23,7 +23,11 @@ def getTweets():
 
 def analyzeSentiment(text):
     sentiment = {}
-    text = json.dumps(text)
+
+    text = json.dumps(" " + text)
+    text = text.replace("\u201c", "")
+    text = text.replace("\u201d", "")
+
     command = "../Linguakit/linguakit tagger  es  " + text + " |../Linguakit/scripts/AdapterFreeling-es.perl |../Linguakit/parserFromDPG.perl -fa |../Linguakit/scripts/saidaCoNLL-fa.perl"
 
     f = os.popen(command)
@@ -72,24 +76,24 @@ if __name__ == "__main__":
     tweets = getTweets();
     results = 0
 
-    for tid, tweet in tweets.iteritems():
-        try:
-            inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
-        except:
-            print "cacaca " + tid
-            sys.exit()
-
-        equals = sentimentMatch(inferred, tweet["polarity"])
-        results += equals
-
-        print tid + "=>" + str(equals)
-
-    # tid = '148706855860973568'
-    # tweet = tweets[tid]
-    # inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
-    # equals = sentimentMatch(inferred, tweet["polarity"])
-    # results += equals
+    # for tid, tweet in tweets.iteritems():
+    #     try:
+    #         inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+    #     except:
+    #         print "cacaca " + tid
+    #         sys.exit()
     #
-    # print tid + "=>" + str(equals)
+    #     equals = sentimentMatch(inferred, tweet["polarity"])
+    #     results += equals
+    #
+    #     print tid + "=>" + str(equals)
+
+    tid = '144725240075915264'
+    tweet = tweets[tid]
+    inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+    equals = sentimentMatch(inferred, tweet["polarity"])
+    results += equals
+
+    print tid + "=>" + str(equals)
 
     print results
