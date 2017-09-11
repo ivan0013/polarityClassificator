@@ -28,7 +28,7 @@ def analyzeSentiment(text):
     text = text.replace("\u201c", "")
     text = text.replace("\u201d", "")
 
-    command = "../Linguakit/linguakit tagger  es  " + text + " |../Linguakit/scripts/AdapterFreeling-es.perl |../Linguakit/parserFromDPG.perl -fa |../Linguakit/scripts/saidaCoNLL-fa.perl"
+    command = "echo " + text + " | ../Linguakit/linguakit tagger  es  |../Linguakit/scripts/AdapterFreeling-es.perl |../Linguakit/parserFromDPG.perl -fa |../Linguakit/scripts/saidaCoNLL-fa.perl"
 
     f = os.popen(command)
     result = f.read()
@@ -76,26 +76,26 @@ if __name__ == "__main__":
     tweets = getTweets();
     results = 0
 
-    for tid, tweet in tweets.iteritems():
-        if tweet["text"] is not None:
-            try:
-                inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
-            except:
-                print "Exception in  " + tid
-                sys.exit()
-
-        equals = sentimentMatch(inferred, tweet["polarity"])
-        results += equals
-
-        print tid + "=>" + str(equals)
-
-    # tid = '167301187157229568'
-    # tweet = tweets[tid]
-    # inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
-    # equals = sentimentMatch(inferred, tweet["polarity"])
-    # results += equals
+    # for tid, tweet in tweets.iteritems():
+    #     if tweet["text"] is not None:
+    #         try:
+    #             inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+    #         except:
+    #             print "Exception in  " + tid
+    #             sys.exit()
     #
-    # print tid + "=>" + str(equals)
+    #     equals = sentimentMatch(inferred, tweet["polarity"])
+    #     results += equals
     #
-    # print "FINAL: \n"
+    #     print tid + "=>" + str(equals)
+
+    tid = '167301187157229568'
+    tweet = tweets[tid]
+    inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+    equals = sentimentMatch(inferred, tweet["polarity"])
+    results += equals
+
+    print tid + "=>" + str(equals)
+
+    print "FINAL: \n"
     print results

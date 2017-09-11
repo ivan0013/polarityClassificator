@@ -67,6 +67,7 @@ def getSentimentDico(path):
         for line in dico:
             line = chomp(line)
             line = line.split("\t")
+            print line
             finalDico[line[0]] = line[1][0:3].lower()
 
     return finalDico
