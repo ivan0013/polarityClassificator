@@ -1,0 +1,89 @@
+##########GRAMATICA COMUM PARA PT, ES, GL, FR################################
+
+##Marcando os lemmas polarizados:
+Single: X<lemma:$NEG>
+Add: pol:neg
+%
+Single: X<lemma:$POS>
+Add: pol:pos
+%
+
+##Casos gerais sem combinatória:
+TermR: X<lemma:$NEG> X|PUNCT
+Add: pol:neg
+NoUniq
+%
+TermR: X<lemma:$POS> X|PUNCT
+Add: pol:pos
+NoUniq
+%
+
+##fácil/sencillo + de + vb positivo = positivo
+## fácil de organizar ; sencillo de manejar
+CprepR: X<lemma:fácil|sencillo> PRP<lemma:de> VERB<lemma:$POS>
+Add: pol:pos
+%
+
+##fácil/sencillo + de + vb negativo = negativo
+##fácil de manipular ; sencillo de romper
+Single: X<lemma:fácil|sencillo> [PRP<lemma:de>] [VERB<lemma:$NEG>]
+Add: pol:neg
+NEXT
+CprepR: X<lemma:fácil|sencillo> PRP<lemma:de> VERB<lemma:$NEG>
+Add: pol:neg
+%
+
+##difícil/complicado/duro + de + vb positivo = negativo
+##difícil de proteger ; complicado de diagnosticar
+Single: [X<lemma:difícil|complicado|duro>] [PRP<lemma:de>] VERB<lemma:$POS>
+Add: pol:neg
+NEXT
+CprepR: X<lemma:difícil|complicado|duro> PRP<lemma:de> VERB<lemma:$POS>
+%
+
+##difícil/complicado/duro + de + vb negativo = positivo 
+##difícil de manipular ; complicado de falsificar
+Single: [X<lemma:difícil|complicado|duro>] [PRP<lemma:de>] VERB<lemma:$NEG>
+Add: pol:pos
+NEXT
+CprepR: X<lemma:difícil|complicado|duro> PRP<lemma:de> VERB<lemma:$NEG>
+Add: pol:pos
+%
+
+### adj pos + noun neg = negativo
+## gran imbécil 
+Single: ADJ<pol:pos> [NOUN<pol:neg>]
+Add: pol:neg
+NEXT
+AdjnL: ADJ<pol:pos> NOUN<pol:neg>
+%
+
+### adj neg + noun = negativo
+### mal negocio
+AdjnL: ADJ<pol:neg> NOUN
+Add: pol:neg
+%
+AdjnR: NOUN ADJ<pol:neg>
+Add: pol:neg
+%
+
+
+### adj pos + noun = positivo
+### buen negocio
+AdjnL: ADJ<pol:pos> NOUN
+Add: pol:pos
+%
+AdjnR: NOUN ADJ<pol:pos>
+Add: pol:pos
+%
+
+CprepR: ADJ|NOUN PRP X
+%
+CircR: VERB PRP X
+%
+
+AtrR: VERB<lemma:ser> ADJ
+%
+
+
+
