@@ -76,26 +76,26 @@ if __name__ == "__main__":
     tweets = getTweets();
     results = 0
 
-    # for tid, tweet in tweets.iteritems():
-    #     if tweet["text"] is not None:
-    #         try:
-    #             inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
-    #         except:
-    #             print "Exception in  " + tid
-    #             sys.exit()
-    #
-    #     equals = sentimentMatch(inferred, tweet["polarity"])
-    #     results += equals
-    #
-    #     print tid + "=>" + str(equals)
+    for tid, tweet in tweets.iteritems():
+        if tweet["text"] is not None:
+            try:
+                inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+            except:
+                print "Exception in  " + tid
+                sys.exit()
 
-    tid = '167301187157229568'
-    tweet = tweets[tid]
-    inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
-    equals = sentimentMatch(inferred, tweet["polarity"])
-    results += equals
+        equals = sentimentMatch(inferred, tweet["polarity"])
+        results += equals
 
-    print tid + "=>" + str(equals)
+        print tid + "=>" + str(equals)
+
+    # tid = '167301187157229568'
+    # tweet = tweets[tid]
+    # inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+    # equals = sentimentMatch(inferred, tweet["polarity"])
+    # results += equals
+    #
+    # print tid + "=>" + str(equals)
 
     print "FINAL: \n"
     print results

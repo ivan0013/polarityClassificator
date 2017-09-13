@@ -23,13 +23,26 @@ def getTweets(path):
 
 def analyzeSentiment(text, sentimentDico):
     sentiment = {}
+    lemas = list()
 
     text = json.dumps(" " + text)
     text = text.replace("\u201c", "")
     text = text.replace("\u201d", "")
-    text = getWords(text)
 
-    for word in text:
+    command = "echo " + text + " | ../Linguakit/linguakit lem  es"
+
+    f = os.popen(command)
+    result = f.read()
+    result = result.split("\n")
+    for line in result:
+        splited = line.split("\t")
+        try:
+            word = splited[1]
+            lemas.append(word)
+        except:
+            pass
+
+    for lemas in text:
         if word in sentimentDico.keys():
             sentiment[word] = sentimentDico[word]
 
