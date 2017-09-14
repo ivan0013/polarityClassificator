@@ -5,11 +5,9 @@ import sys
 import xml.etree.ElementTree
 import os
 import json
-import re
 
-
-def getTweets(path):
-    tweets = xml.etree.ElementTree.parse(path).getroot()
+def getTweets():
+    tweets = xml.etree.ElementTree.parse('../tweets.xml').getroot()
     parsedTweets = {}
 
     for tweet in tweets:
@@ -22,15 +20,14 @@ def getTweets(path):
 
     return parsedTweets
 
-def analyzeSentiment(text, sentimentDico):
+def analyzeSentiment(text):
     sentiment = {}
-    lemas = list()
 
     text = json.dumps(" " + text)
     text = text.replace("\u201c", "")
     text = text.replace("\u201d", "")
 
-    command = "echo " + text + " | ../Linguakit/linguakit lem  es"
+    command = "../Linguakit/linguakit tagger  es  " + text + " |../Linguakit/scripts/AdapterFreeling-es.perl |../Linguakit/parserFromDPG.perl -fa |../Linguakit/scripts/saidaCoNLL-fa.perl"
 
     f = os.popen(command)
     result = f.read()
@@ -39,19 +36,16 @@ def analyzeSentiment(text, sentimentDico):
         splited = line.split("\t")
         try:
             word = splited[1]
-            lemas.append(word)
+            pol = splited[5].split("pol:")[1].split("|")[0]
+            sentiment[word] = pol
         except:
             pass
 
-    for lemas in text:
-        if word in sentimentDico.keys():
-            sentiment[word] = sentimentDico[word]
-
     return sentiment
 
-def getFinalSentiment(text, sentimentDico):
+def getFinalSentiment(text):
     count = 0
-    sentiment = analyzeSentiment(text, sentimentDico)
+    sentiment = analyzeSentiment(text)
 
     for word, val in sentiment.iteritems():
         if val == "pos":
@@ -75,49 +69,23 @@ def sentimentMatch(inferred, polarity):
 
     return answer
 
-def getSentimentDico(path):
-    finalDico = {}
-    with open (path, "r") as dico:
-        for line in dico:
-            line = chomp(line)
-            line = line.split("\t")
-            finalDico[line[0]] = line[1][0:3].lower()
 
-    return finalDico
 
-def chomp(x):
-    if x.endswith("\r\n"): return x[:-2]
-    if x.endswith("\n"): return x[:-1]
-    return x
+if __name__ == "__main__":
+    tweets = getTweets();
+    results = 0
 
-def getWords(text):
-    return re.compile('\w+').findall(text)
-
-def analysis(tid, tweet, sentimentDico):
-    equals = 0
-
-    if tweet["text"] is not None:
+    for tid, tweet in tweets.iteritems():
         try:
-            #print tweet["text"].encode('utf-8')
-            inferred = getFinalSentiment(tweet["text"].encode('utf-8'), sentimentDico)
-        except Exception as e:
+            inferred = getFinalSentiment(tweet["text"].encode('utf-8'))
+        except:
             print "Exception in  " + tid
-            print str(e.message)
-
             sys.exit()
 
         equals = sentimentMatch(inferred, tweet["polarity"])
+        results += equals
 
-    return equals
-
-if __name__ == "__main__":
-    tweets = getTweets('../tweets.xml');
-    sentimentDico = getSentimentDico("../Linguakit/sentiment/es/lex_es");
-    results = 0
-
-
-    Parallel(n_jobs=4)(delayed(analysis)(tid, tweet, sentimentDico) for tid, tweet in tweets.iteritems())
-
+        print tid + "=>" + str(equals)
 
     # tid = '167301187157229568'
     # tweet = tweets[tid]
@@ -128,3 +96,4 @@ if __name__ == "__main__":
     # print tid + "=>" + str(equals)
     #
     # print "FINAL: \n"
+    print results
