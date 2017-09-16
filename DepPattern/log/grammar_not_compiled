@@ -18,35 +18,83 @@ Add: pol:pos
 NoUniq
 %
 
+###########AUXILIARES
+VSpecL: VERB<type:S> [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? VERB<mode:P> 
+Inherit: mode, person, tense, number
+%
+
+VSpecL: VERB<(type:A)|(lemma:ter|haver|haber|avoir|have|deber|querer|poder)> [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? VERB 
+Inherit: mode, person, tense, number
+%
+
+##conj+que 'hay que, tienes que'
+VSpecL: [VERB<lemma:tener|haber>] [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? CONJ<lemma:que> [ADV]? VERB<mode:N> 
+NEXT
+VSpecL: VERB<lemma:tener|haber> [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [CONJ<lemma:que>] [ADV]? VERB<mode:N> 
+Inherit: mode, person, tense, number
+%
+
+#################
+
+
+##no es guapo
+AdjnL: [ADV<lemma:no>] VERB<lemma:be|seem|look> [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? NOUN|ADJ<lemma:$NEG> 
+Add: pol:pos
+%
+
+AdjnL: [ADV<lemma:no>] VERB<lemma:be|seem|look> [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? [ADV]? NOUN|ADJ<lemma:$POS> 
+Add: pol:neg
+%
+
+
+##no le gusta
+SpecL: [ADV<lemma:no>] PRO  VERB<lemma:$NEG>
+Add: pol:pos
+%
+SpecL: [ADV<lemma:no>] PRO  VERB<lemma:$POS>
+Add: pol:neg
+%
+
+##nada guapo
+AdjnL: X<lemma:any> X<lemma:$NEG>
+Add: pol:pos
+%
+AdjnL: X<lemma:any> X<lemma:$POS>
+Add: pol:neg
+%
+
+
 ##fácil/sencillo + de + vb positivo = positivo
 ## fácil de organizar ; sencillo de manejar
-CprepR: X<lemma:fácil|sencillo> PRP<lemma:de> VERB<lemma:$POS>
+CprepR: X<lemma:easy> PRP<lemma:of|to> VERB<lemma:$POS>
 Add: pol:pos
 %
 
 ##fácil/sencillo + de + vb negativo = negativo
 ##fácil de manipular ; sencillo de romper
-Single: X<lemma:fácil|sencillo> [PRP<lemma:de>] [VERB<lemma:$NEG>]
+Single: X<lemma:easy> [PRP<lemma:of|to>] [VERB<lemma:$NEG>]
 Add: pol:neg
 NEXT
-CprepR: X<lemma:fácil|sencillo> PRP<lemma:de> VERB<lemma:$NEG>
+CprepR: X<lemma:easy> PRP<lemma:of|to> VERB<lemma:$NEG>
 Add: pol:neg
 %
 
 ##difícil/complicado/duro + de + vb positivo = negativo
 ##difícil de proteger ; complicado de diagnosticar
-Single: [X<lemma:difícil|complicado|duro>] [PRP<lemma:de>] VERB<lemma:$POS>
+Single: [X<lemma:hard|complicated|difficult|taugh>] [PRP<lemma:to|of>] VERB<lemma:$POS>
 Add: pol:neg
 NEXT
-CprepR: X<lemma:difícil|complicado|duro> PRP<lemma:de> VERB<lemma:$POS>
+CprepR: X<lemma:hard|complicated|difficult|taugh> PRP<lemma:to|of> VERB<lemma:$POS>
 %
+
+
 
 ##difícil/complicado/duro + de + vb negativo = positivo 
 ##difícil de manipular ; complicado de falsificar
-Single: [X<lemma:difícil|complicado|duro>] [PRP<lemma:de>] VERB<lemma:$NEG>
+Single: [X<lemma:hard|complicated|difficult|taugh>] [PRP<lemma:to|of>] VERB<lemma:$NEG>
 Add: pol:pos
 NEXT
-CprepR: X<lemma:difícil|complicado|duro> PRP<lemma:de> VERB<lemma:$NEG>
+CprepR: X<lemma:hard|complicated|difficult|taugh> PRP<lemma:to|of> VERB<lemma:$NEG>
 Add: pol:pos
 %
 
@@ -55,7 +103,7 @@ Add: pol:pos
 Single: ADJ<pol:pos> [NOUN<pol:neg>]
 Add: pol:neg
 NEXT
-AdjnL: ADJ<pol:pos> NOUN<pol:neg>
+AdjnL: ADJ<pol:neg> NOUN<pol:neg>
 %
 
 ### adj neg + noun = negativo
@@ -82,7 +130,7 @@ CprepR: ADJ|NOUN PRP X
 CircR: VERB PRP X
 %
 
-AtrR: VERB<lemma:ser> ADJ
+AtrR: VERB<lemma:be> ADJ
 %
 
 

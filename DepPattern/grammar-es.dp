@@ -18,6 +18,47 @@ Add: pol:pos
 NoUniq
 %
 
+###########AUXILIARES
+VSpecL: VERB<type:S> [ADV]* VERB<mode:P>
+Inherit: mode, person, tense, number
+%
+VSpecL: VERB<(type:A)|(lemma:ter|haver|haber|avoir|have|deber|querer|poder)> [ADV]* VERB
+Inherit: mode, person, tense, number
+%
+##conj+que 'hay que, tienes que'
+VSpecL: [VERB<lemma:tener|haber>] [ADV]* CONJ<lemma:que> [ADV]? VERB<mode:N>
+NEXT
+VSpecL: VERB<lemma:tener|haber> [ADV]* [CONJ<lemma:que>] [ADV]? VERB<mode:N>
+Inherit: mode, person, tense, number
+%
+#################
+
+
+##no es guapo
+AdjnL: [ADV<lemma:no>] VERB<lemma:ser|estar|parecer|resultar> [ADV]* NOUN|ADJ<lemma:$NEG>
+Add: pol:pos
+%
+AdjnL: [ADV<lemma:no>] VERB<lemma:ser|estar|parecer|resultar> [ADV]* NOUN|ADJ<lemma:$POS>
+Add: pol:neg
+%
+
+##no le gusta
+SpecL: [ADV<lemma:no>] PRO  VERB<lemma:$NEG>
+Add: pol:pos
+%
+SpecL: [ADV<lemma:no>] PRO  VERB<lemma:$POS>
+Add: pol:neg
+%
+
+##nada guapo
+AdjnL: X<lemma:nada> X<lemma:$NEG>
+Add: pol:pos
+%
+AdjnL: X<lemma:nada> X<lemma:$POS>
+Add: pol:neg
+%
+
+
 ##fácil/sencillo + de + vb positivo = positivo
 ## fácil de organizar ; sencillo de manejar
 CprepR: X<lemma:fácil|sencillo> PRP<lemma:de> VERB<lemma:$POS>
@@ -41,6 +82,8 @@ NEXT
 CprepR: X<lemma:difícil|complicado|duro> PRP<lemma:de> VERB<lemma:$POS>
 %
 
+
+
 ##difícil/complicado/duro + de + vb negativo = positivo 
 ##difícil de manipular ; complicado de falsificar
 Single: [X<lemma:difícil|complicado|duro>] [PRP<lemma:de>] VERB<lemma:$NEG>
@@ -55,7 +98,7 @@ Add: pol:pos
 Single: ADJ<pol:pos> [NOUN<pol:neg>]
 Add: pol:neg
 NEXT
-AdjnL: ADJ<pol:pos> NOUN<pol:neg>
+AdjnL: ADJ<pol:neg> NOUN<pol:neg>
 %
 
 ### adj neg + noun = negativo
