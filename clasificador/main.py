@@ -8,6 +8,8 @@ import json
 import re
 from joblib import Parallel, delayed
 from multiprocessing import Pool, Lock
+import sys
+
 
 lock = Lock()
 
@@ -19,6 +21,8 @@ def getTweets(path):
     for tweet in tweets:
         tid = tweet[0].text
         text = tweet[2].text
+        if text is not None:
+            text = text.encode("utf-8")
         polarity = list(tweet[5])[0]
         polarity = polarity[0].text
 
@@ -82,14 +86,16 @@ def analyzeSentiment(text, sentimentDico, analyzer):
     sentiment = {}
     lemas = list()
 
-    text = json.dumps(" " + text)
-    text = text.replace("\u201c", "")
-    text = text.replace("\u201d", "")
+    # text = json.dumps(" " + text)
+    # text = text.replace("\u201c", "")
+    # text = text.replace("\u201d", "")
+
+    text = text.replace("\"", "")
 
     if analyzer == "basico":
         command = "echo " + text + " | ../Linguakit/linguakit tagger  es"
     else:
-        command = "echo " + text + " | ../Linguakit/linguakit tagger  es  |../Linguakit/scripts/AdapterFreeling-en.perl |../Linguakit/parserFromDPG.perl -fa |../Linguakit/scripts/saidaCoNLL-fa.perl"
+        command = "echo  \"" + text + "\" | ../Linguakit/linguakit tagger  es  |../Linguakit/scripts/AdapterFreeling-es.perl |../Linguakit/parserFromDPG.perl -fa |../Linguakit/scripts/saidaCoNLL-fa.perl"
 
     f = os.popen(command)
     result = f.read()
@@ -194,8 +200,7 @@ def analysis(tid, tweet, sentimentDico, analyzer, matrix):
 
     if tweet["text"] is not None:
         try:
-            #print tweet["text"].encode('utf-8')
-            inferred = getFinalSentiment(tweet["text"].encode('utf-8'), sentimentDico, analyzer)
+            inferred = getFinalSentiment(tweet["text"], sentimentDico, analyzer)
             equals = sentimentMatch(inferred, tweet["polarity"], matrix)
 
         except Exception as e:
@@ -205,6 +210,9 @@ def analysis(tid, tweet, sentimentDico, analyzer, matrix):
     return equals
 
 if __name__ == "__main__":
+    reload(sys)
+    sys.setdefaultencoding("utf-8")
+
     tweets = getTweets(sys.argv[1]) #'../tweets.xml'
     #tweets = getEnglishTweets(sys.argv[1])
 
