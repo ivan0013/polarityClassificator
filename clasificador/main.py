@@ -6,7 +6,6 @@ import xml.etree.ElementTree
 import os
 import json
 import re
-from joblib import Parallel, delayed
 from multiprocessing import Pool, Lock
 import sys
 
